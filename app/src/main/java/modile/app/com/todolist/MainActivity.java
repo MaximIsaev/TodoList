@@ -14,9 +14,11 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import modile.app.com.todolist.dao.Task;
+
 public class MainActivity extends AppCompatActivity {
 
-	private ArrayList<String> tasks;
+	private ArrayList<Task> tasks;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +65,11 @@ public class MainActivity extends AppCompatActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
 			Bundle extras = data.getExtras();
-			Log.i("TEST", extras.getString("tmp"));
-			tasks.add(extras.getString("tmp"));
+			Log.i("TEST", extras.getString("taskName"));
+			tasks.add(new Task(extras.getString("taskName"), false));
 			if (tasks != null) {
 				ListView listView = (ListView) findViewById(R.id.taskList);
-				TaskListAdapter adapter = new TaskListAdapter(this,   tasks);
+				TaskListAdapter adapter = new TaskListAdapter(this, tasks);
 				listView.setAdapter(adapter);
 			}
 		}

@@ -7,15 +7,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import modile.app.com.todolist.dao.Task;
 
 public class TaskListAdapter extends BaseAdapter {
 
 	Context context;
 	LayoutInflater layoutInflater;
-	ArrayList<String> tasks;
+	List<Task> tasks;
 
-	public TaskListAdapter(Context context, ArrayList<String> tasks) {
+	public TaskListAdapter(Context context, List<Task> tasks) {
 		this.context = context;
 		this.tasks = tasks;
 		this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -42,8 +44,8 @@ public class TaskListAdapter extends BaseAdapter {
 		if (view == null) {
 			view = layoutInflater.inflate(R.layout.item_layout, parent, false);
 		}
-		TextView itemName = (TextView) view.findViewById(R.id.item_name);
-		itemName.setText(tasks.get(position));
+		TextView item = (TextView) view.findViewById(R.id.item_name);
+		item.setText(tasks.get(position).getName());
 		return view;
 	}
 }

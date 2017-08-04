@@ -30,7 +30,7 @@ public class AddNewTaskActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		String task = textView.getText().toString();
 		Intent intent = new Intent(this, MainActivity.class);
-		intent.putExtra("tmp", task);
+		intent.putExtra("taskName", task);
 		setResult(RESULT_OK, intent);
 		finish();
 		return super.onOptionsItemSelected(item);
