@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 			tasks.add(extras.getString("tmp"));
 			if (tasks != null) {
 				ListView listView = (ListView) findViewById(R.id.taskList);
-				ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tasks);
+				TaskListAdapter adapter = new TaskListAdapter(this,   tasks);
 				listView.setAdapter(adapter);
 			}
 		}
