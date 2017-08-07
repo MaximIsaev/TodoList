@@ -1,14 +1,16 @@
-package mobile.app.com.todolist;
+package mobile.app.com.todolist.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.List;
 
+import mobile.app.com.todolist.R;
 import mobile.app.com.todolist.dao.Task;
 
 public class TaskListAdapter extends BaseAdapter {
@@ -16,6 +18,8 @@ public class TaskListAdapter extends BaseAdapter {
 	Context context;
 	LayoutInflater layoutInflater;
 	List<Task> tasks;
+	TextView textView;
+	CheckBox checkBox;
 
 	public TaskListAdapter(Context context, List<Task> tasks) {
 		this.context = context;
@@ -44,8 +48,10 @@ public class TaskListAdapter extends BaseAdapter {
 		if (view == null) {
 			view = layoutInflater.inflate(R.layout.item_layout, parent, false);
 		}
-		TextView item = (TextView) view.findViewById(R.id.item_name);
-		item.setText(tasks.get(position).getName());
+		textView = (TextView) view.findViewById(R.id.item_name);
+		textView.setText(tasks.get(position).getName());
+		checkBox = (CheckBox) view.findViewById(R.id.is_done_checkbox);
+		checkBox.setChecked(tasks.get(position).isDone());
 		return view;
 	}
 }

@@ -1,6 +1,8 @@
 package mobile.app.com.todolist;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -12,12 +14,18 @@ import android.view.View;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import mobile.app.com.todolist.adapter.TaskListAdapter;
+import mobile.app.com.todolist.configuration.DbHelper;
 import mobile.app.com.todolist.dao.Task;
+import mobile.app.com.todolist.services.TaskService;
 
 public class MainActivity extends AppCompatActivity {
 
-	private ArrayList<Task> tasks;
+	List<Task> tasks;
+	DbHelper dbHelper;
+	TaskService taskService;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +33,10 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		tasks = new ArrayList<>();
-
+		dbHelper = new DbHelper(this);
+		taskService = new TaskService(dbHelper);
+		tasks = taskService.getAllTasks();
+		displayTasks(tasks);
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 		fab.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -63,14 +73,15 @@ public class MainActivity extends AppCompatActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
-			Bundle extras = data.getExtras();
-			Log.i("TEST", extras.getString("taskName"));
-			tasks.add(new Task(extras.getString("taskName"), false));
-			if (tasks != null) {
-				ListView listView = (ListView) findViewById(R.id.taskList);
-				TaskListAdapter adapter = new TaskListAdapter(this, tasks);
-				listView.setAdapter(adapter);
-			}
+			displayTasks(taskService.getAllTasks());
+		}
+	}
+
+	private void displayTasks(List<Task> tasks) {
+		ListView listView = (ListView) findViewById(R.id.taskList);
+		TaskListAdapter adapter = new TaskListAdapter(this, tasks);
+		if (listView != null) {
+			listView.setAdapter(adapter);
 		}
 	}
 }

@@ -8,16 +8,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import mobile.app.com.todolist.configuration.DbHelper;
+import mobile.app.com.todolist.dao.Task;
+import mobile.app.com.todolist.services.TaskService;
+
 public class AddNewTaskActivity extends AppCompatActivity {
 
 
 	TextView textView;
+	DbHelper dbHelper;
+	TaskService taskService;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_task_activity);
 		textView = (TextView) findViewById(R.id.addNewTaskInput);
+		dbHelper = new DbHelper(this);
+		taskService = new TaskService(dbHelper);
 	}
 
 	@Override
@@ -28,11 +36,16 @@ public class AddNewTaskActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		String task = textView.getText().toString();
+		saveTask();
 		Intent intent = new Intent(this, MainActivity.class);
-		intent.putExtra("taskName", task);
 		setResult(RESULT_OK, intent);
 		finish();
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void saveTask() {
+		String taskName = textView.getText().toString();
+		Task task = new Task(taskName, false);
+		taskService.saveTask(task);
 	}
 }
