@@ -1,4 +1,4 @@
-package modile.app.com.todolist;
+package mobile.app.com.todolist;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

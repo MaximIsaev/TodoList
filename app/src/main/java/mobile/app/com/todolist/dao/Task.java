@@ -1,4 +1,4 @@
-package modile.app.com.todolist.dao;
+package mobile.app.com.todolist.dao;
 
 public class Task {
 

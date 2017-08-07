@@ -1,4 +1,4 @@
-package modile.app.com.todolist;
+package mobile.app.com.todolist;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,12 +9,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import modile.app.com.todolist.dao.Task;
+import mobile.app.com.todolist.dao.Task;
 
 public class MainActivity extends AppCompatActivity {
 

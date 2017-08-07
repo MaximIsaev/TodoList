@@ -1,4 +1,4 @@
-package modile.app.com.todolist;
+package mobile.app.com.todolist;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import modile.app.com.todolist.dao.Task;
+import mobile.app.com.todolist.dao.Task;
 
 public class TaskListAdapter extends BaseAdapter {
 

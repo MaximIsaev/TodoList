@@ -1,4 +1,4 @@
-package modile.app.com.todolist;
+package mobile.app.com.todolist;
 
 import org.junit.Test;
 
