@@ -1,19 +1,18 @@
 package mobile.app.com.todolist;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import mobile.app.com.todolist.adapter.TaskListAdapter;
@@ -26,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 	List<Task> tasks;
 	DbHelper dbHelper;
 	TaskService taskService;
+	ListView listView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 		dbHelper = new DbHelper(this);
 		taskService = new TaskService(dbHelper);
+		listView = (ListView) findViewById(R.id.taskList);
 		tasks = taskService.getAllTasks();
 		displayTasks(tasks);
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -45,28 +46,26 @@ public class MainActivity extends AppCompatActivity {
 				startActivityForResult(intent, 101);
 			}
 		});
+		registerForContextMenu(listView);
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_main, menu);
-		return true;
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater menuInflater = getMenuInflater();
+		menuInflater.inflate(R.menu.task_context_menu, menu);
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-
-		//noinspection SimplifiableIfStatement
-		if (id == R.id.action_settings) {
-			return true;
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+		switch (item.getItemId()) {
+			case R.id.edit_item:
+				Log.d("MYLOG", "id is " + info.id);
+				return true;
+			default:
+				return super.onContextItemSelected(item);
 		}
-
-		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -78,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void displayTasks(List<Task> tasks) {
-		ListView listView = (ListView) findViewById(R.id.taskList);
 		TaskListAdapter adapter = new TaskListAdapter(this, tasks);
 		if (listView != null) {
 			listView.setAdapter(adapter);

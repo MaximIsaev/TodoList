@@ -1,7 +1,9 @@
 package mobile.app.com.todolist.adapter;
 
 import android.content.Context;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,7 +15,7 @@ import java.util.List;
 import mobile.app.com.todolist.R;
 import mobile.app.com.todolist.dao.Task;
 
-public class TaskListAdapter extends BaseAdapter {
+public class TaskListAdapter extends BaseAdapter implements View.OnCreateContextMenuListener {
 
 	Context context;
 	LayoutInflater layoutInflater;
@@ -52,6 +54,12 @@ public class TaskListAdapter extends BaseAdapter {
 		textView.setText(tasks.get(position).getName());
 		checkBox = (CheckBox) view.findViewById(R.id.is_done_checkbox);
 		checkBox.setChecked(tasks.get(position).isDone());
+		view.setOnCreateContextMenuListener(this);
 		return view;
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
 	}
 }
