@@ -16,6 +16,9 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import mobile.app.com.todolist.loader.MyCursorLoader;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -23,6 +26,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	ListView listView;
 	Db db;
 	SimpleCursorAdapter cursorAdapter;
+	Map<Integer, Boolean> itemSelection = new HashMap<>();
+	MenuItem editItem;
+	private int count = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +51,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			@Override
 			public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
 				mode.getMenuInflater().inflate(R.menu.task_context_menu, menu);
+				editItem = menu.findItem(R.id.edit_item);
 				return true;
 			}
 
 			@Override
 			public boolean onPrepareActionMode(android.view.ActionMode mode, Menu menu) {
-				mode.setTitle("Todolist");
-//				findViewById(R.id.toolbar).
 				return false;
 			}
 
@@ -63,13 +68,25 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 			@Override
 			public void onDestroyActionMode(android.view.ActionMode mode) {
-
+				clearSelections();
 			}
 
 			@Override
 			public void onItemCheckedStateChanged(android.view.ActionMode mode, int position, long id, boolean checked) {
 				Log.d("TEST", "position = " + position + ", checked = "
 						+ checked);
+				if (checked) {
+					count++;
+					setNewSelection(position, checked);
+				} else {
+					count--;
+					removeSelection(position);
+				}
+				if (count > 1) {
+					editItem.setVisible(false);
+				} else {
+					editItem.setVisible(true);
+				}
 			}
 		});
 
@@ -110,5 +127,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	protected void onDestroy() {
 		super.onDestroy();
 		db.close();
+	}
+
+	public void setNewSelection(Integer position, boolean value) {
+		itemSelection.put(position, value);
+	}
+
+	public boolean isPositionChecked(Integer position) {
+		Boolean checked = itemSelection.get(position);
+		return checked == null ? false : checked;
+	}
+
+	public void removeSelection(Integer position) {
+		itemSelection.remove(position);
+	}
+
+	public void clearSelections() {
+		itemSelection.clear();
 	}
 }
