@@ -36,8 +36,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		String[] from = new String[]{Db.COLUMN_ITEM_NAME};
 		int[] to = new int[]{R.id.item_name};
 
-		cursorAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_activated_1, null, from, to, 0);
-//		cursorAdapter = new SimpleCursorAdapter(this, R.layout.item_layout, null, from, to, 0);
+		cursorAdapter = new SimpleCursorAdapter(this, R.layout.item_layout, null, from, to, 0);
 		listView = (ListView) findViewById(R.id.taskList);
 		listView.setAdapter(cursorAdapter);
 		listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
