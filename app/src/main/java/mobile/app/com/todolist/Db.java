@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import mobile.app.com.todolist.configuration.DbHelper;
 import mobile.app.com.todolist.dao.Task;
@@ -56,7 +57,8 @@ public class Db {
 	}
 
 	public void delete(long id) {
-		db.delete(DB_TABLE, COLUMN_ID + " = " + id, null);
+		int delete = db.delete(DB_TABLE, COLUMN_ID + " = " + id, null);
+		Log.d("TEST", "delete rows " + delete);
 	}
 
 }

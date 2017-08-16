@@ -17,7 +17,9 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import mobile.app.com.todolist.loader.MyCursorLoader;
 
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	ListView listView;
 	Db db;
 	SimpleCursorAdapter cursorAdapter;
-	Map<Integer, Boolean> itemSelection = new HashMap<>();
+	Map<Long, Boolean> itemSelection = new HashMap<>();
 	MenuItem editItem;
 	private int count = 0;
 
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 			@Override
 			public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
+				count = 0;
 				mode.getMenuInflater().inflate(R.menu.task_context_menu, menu);
 				editItem = menu.findItem(R.id.edit_item);
 				return true;
@@ -62,8 +65,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 			@Override
 			public boolean onActionItemClicked(android.view.ActionMode mode, MenuItem item) {
+
+				switch (item.getItemId()) {
+					case R.id.delete_item:
+						Set<Long> keys = itemSelection.keySet();
+						Iterator<Long> iterator = keys.iterator();
+						while (iterator.hasNext()) {
+							db.delete(iterator.next());
+						}
+						getSupportLoaderManager().restartLoader(0, null, MainActivity.this);
+						break;
+					case R.id.edit_item:
+						break;
+				}
 				mode.finish();
-				return false;
+				return true;
 			}
 
 			@Override
@@ -73,14 +89,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 			@Override
 			public void onItemCheckedStateChanged(android.view.ActionMode mode, int position, long id, boolean checked) {
-				Log.d("TEST", "position = " + position + ", checked = "
+				Log.d("TEST", "id = " + id + ", checked = "
 						+ checked);
 				if (checked) {
 					count++;
-					setNewSelection(position, checked);
+					setNewSelection(id, checked);
 				} else {
 					count--;
-					removeSelection(position);
+					removeSelection(id);
 				}
 				if (count > 1) {
 					editItem.setVisible(false);
@@ -129,16 +145,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		db.close();
 	}
 
-	public void setNewSelection(Integer position, boolean value) {
+	public void setNewSelection(Long position, boolean value) {
 		itemSelection.put(position, value);
 	}
 
-	public boolean isPositionChecked(Integer position) {
+	public boolean isPositionChecked(Long position) {
 		Boolean checked = itemSelection.get(position);
 		return checked == null ? false : checked;
 	}
 
-	public void removeSelection(Integer position) {
+	public void removeSelection(Long position) {
 		itemSelection.remove(position);
 	}
 
