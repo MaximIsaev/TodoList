@@ -2,7 +2,7 @@ package mobile.app.com.todolist.dao;
 
 public class Task {
 
-	private Integer id;
+	private Long id;
 	private String name;
 	private boolean isDone;
 
@@ -14,17 +14,17 @@ public class Task {
 		this.isDone = isDone;
 	}
 
-	public Task(Integer id, String name, boolean isDone) {
+	public Task(Long id, String name, boolean isDone) {
 		this.id = id;
 		this.name = name;
 		this.isDone = isDone;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

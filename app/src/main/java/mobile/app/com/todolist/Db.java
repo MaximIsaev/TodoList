@@ -61,4 +61,22 @@ public class Db {
 		Log.d("TEST", "delete rows " + delete);
 	}
 
+	public Task getOne(Long id) {
+		Cursor cursor = db.query(DB_TABLE, null, COLUMN_ID + " = " + id, null, null, null, null);
+		Task task = new Task();
+		if (cursor.moveToFirst()) {
+			int idIndex = cursor.getColumnIndex(COLUMN_ID);
+			int nameIndex = cursor.getColumnIndex(COLUMN_ITEM_NAME);
+			task.setId(cursor.getLong(idIndex));
+			task.setName(cursor.getString(nameIndex));
+		}
+		return task;
+	}
+
+	public void update(Task task) {
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_ITEM_NAME, task.getName());
+		db.update(DB_TABLE, values, COLUMN_ID + " = " + task.getId(), null);
+	}
+
 }

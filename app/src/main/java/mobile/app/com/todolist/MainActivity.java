@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -21,6 +22,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import mobile.app.com.todolist.dialog.EditTaskDialog;
 import mobile.app.com.todolist.loader.MyCursorLoader;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -73,11 +75,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 						while (iterator.hasNext()) {
 							db.delete(iterator.next());
 						}
-						getSupportLoaderManager().restartLoader(0, null, MainActivity.this);
 						break;
 					case R.id.edit_item:
+						Bundle bundle = new Bundle();
+						bundle.putLong("id", itemSelection.keySet().iterator().next());
+						bundle.putString("name", db.getOne(itemSelection.keySet().iterator().next()).getName());
+						DialogFragment dialog = new EditTaskDialog();
+						dialog.setArguments(bundle);
+						dialog.show(getSupportFragmentManager(), "editTag");
 						break;
 				}
+				getSupportLoaderManager().restartLoader(0, null, MainActivity.this);
 				mode.finish();
 				return true;
 			}
@@ -118,12 +126,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-//		getMenuInflater().inflate(R.menu.task_context_menu, menu);
-		return true;
-	}
-
-	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		return new MyCursorLoader(this, db);
 	}
@@ -136,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
-
 	}
 
 	@Override
